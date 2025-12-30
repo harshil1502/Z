@@ -359,3 +359,155 @@
     @apply text-3xl;
   }
 }
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  /* Improve touch targets */
+  .btn {
+    @apply min-h-[44px] min-w-[44px];
+  }
+
+  /* Stack header elements on mobile */
+  .mobile-stack {
+    @apply flex-col gap-2;
+  }
+
+  /* Full width inputs on mobile */
+  .input {
+    @apply w-full;
+  }
+
+  /* Reduce padding on mobile */
+  .mobile-compact {
+    @apply p-3;
+  }
+
+  /* Hide on mobile */
+  .mobile-hide {
+    display: none !important;
+  }
+
+  /* Smaller text on mobile */
+  .mobile-text-sm {
+    @apply text-sm;
+  }
+
+  /* Bottom nav safe area */
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Mobile sidebar overlay */
+@media (max-width: 1024px) {
+  .sidebar-overlay {
+    @apply fixed inset-0 bg-black/50 z-30;
+  }
+}
+
+/* Mobile horizontal scroll with snap */
+.mobile-scroll-x {
+  @apply flex overflow-x-auto gap-3 pb-2 -mx-4 px-4;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-scroll-x > * {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* Bottom sheet for mobile modals */
+@media (max-width: 640px) {
+  .mobile-bottom-sheet {
+    @apply fixed inset-x-0 bottom-0 rounded-t-2xl max-h-[85vh] overflow-y-auto;
+    animation: slideUp 0.3s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+}
+
+/* Improve table scrolling on mobile */
+@media (max-width: 768px) {
+  .table-container {
+    @apply -mx-4 px-0;
+  }
+
+  .table th,
+  .table td {
+    @apply px-3 py-2 text-xs whitespace-nowrap;
+  }
+
+  /* Sticky first column on mobile */
+  .table-sticky-first th:first-child,
+  .table-sticky-first td:first-child {
+    @apply sticky left-0 z-10 bg-gray-800;
+  }
+}
+
+/* Touch-friendly cards */
+@media (max-width: 768px) {
+  .card {
+    @apply active:scale-[0.98] transition-transform;
+  }
+}
+
+/* Mobile navigation bottom bar */
+.mobile-nav {
+  @apply fixed bottom-0 left-0 right-0 bg-gray-800 border-t border-gray-700 z-50;
+  @apply flex items-center justify-around py-2;
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+}
+
+.mobile-nav-item {
+  @apply flex flex-col items-center gap-1 px-4 py-2 text-gray-400;
+  @apply transition-colors;
+}
+
+.mobile-nav-item.active {
+  @apply text-primary-400;
+}
+
+.mobile-nav-item span {
+  @apply text-[10px] font-medium;
+}
+
+/* Swipe indicator */
+.swipe-indicator {
+  @apply w-10 h-1 bg-gray-600 rounded-full mx-auto mb-2;
+}
+
+/* Pull to refresh indicator */
+.ptr-indicator {
+  @apply flex items-center justify-center py-4 text-gray-400;
+}
+
+/* Floating action button for mobile */
+.fab {
+  @apply fixed bottom-20 right-4 z-40;
+  @apply w-14 h-14 rounded-full bg-primary-600 text-white;
+  @apply flex items-center justify-center shadow-lg shadow-primary-600/30;
+  @apply active:scale-95 transition-transform;
+}
+
+/* Skeleton pulse for mobile */
+@keyframes skeleton-pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.skeleton-mobile {
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  @apply bg-gray-700 rounded;
+}

@@ -8,6 +8,8 @@ import Analytics from './components/Dashboard/Analytics'
 import { Login, Register } from './components/Auth'
 import Alerts from './components/Alerts/Alerts'
 import Settings from './components/Settings/Settings'
+import { FIIDII } from './components/FIIDII'
+import { Watchlist } from './components/Watchlist'
 
 // Protected Route wrapper
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -43,6 +45,8 @@ function App() {
         <Route path="flow" element={<OptionsFlow />} />
         <Route path="chain/:symbol" element={<OptionsChain />} />
         <Route path="analytics" element={<Analytics />} />
+        <Route path="fiidii" element={<FIIDII />} />
+        <Route path="watchlist" element={<Watchlist />} />
         <Route path="alerts" element={<Alerts />} />
         <Route path="settings" element={<Settings />} />
       </Route>

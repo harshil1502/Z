@@ -8,7 +8,9 @@ import {
   Menu,
   X,
   TrendingUp,
-  ChevronDown
+  ChevronDown,
+  Building2,
+  Star
 } from 'lucide-react'
 import { useAppStore } from '../../store'
 import { MarketStatusBadge, ConnectionStatus, IndicesBar, MarketStatusCard } from './MarketStatus'
@@ -18,8 +20,19 @@ const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Options Flow', href: '/flow', icon: Activity },
   { name: 'Analytics', href: '/analytics', icon: BarChart3 },
+  { name: 'FII/DII Flow', href: '/fiidii', icon: Building2 },
+  { name: 'Watchlist', href: '/watchlist', icon: Star },
   { name: 'Alerts', href: '/alerts', icon: Bell },
   { name: 'Settings', href: '/settings', icon: Settings },
+]
+
+// Mobile navigation items (bottom bar)
+const mobileNavigation = [
+  { name: 'Home', href: '/dashboard', icon: LayoutDashboard },
+  { name: 'Flow', href: '/flow', icon: Activity },
+  { name: 'Analytics', href: '/analytics', icon: BarChart3 },
+  { name: 'Watchlist', href: '/watchlist', icon: Star },
+  { name: 'More', href: '#', icon: Menu },
 ]
 
 export default function Layout() {
@@ -37,7 +50,7 @@ export default function Layout() {
           <div className="flex items-center gap-4">
             <button
               onClick={toggleSidebar}
-              className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg"
+              className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg hidden lg:flex"
             >
               {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -50,7 +63,7 @@ export default function Layout() {
           </div>
 
           {/* Center section - Symbol selector */}
-          <div className="flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-2">
             {symbols.map((symbol) => (
               <button
                 key={symbol}
@@ -67,10 +80,25 @@ export default function Layout() {
             ))}
           </div>
 
+          {/* Mobile symbol selector dropdown */}
+          <div className="md:hidden">
+            <select
+              value={selectedSymbol}
+              onChange={(e) => setSelectedSymbol(e.target.value)}
+              className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white focus:ring-2 focus:ring-primary-500"
+            >
+              {symbols.map((symbol) => (
+                <option key={symbol} value={symbol}>{symbol}</option>
+              ))}
+            </select>
+          </div>
+
           {/* Right section */}
-          <div className="flex items-center gap-4">
-            {/* Market Status Badge */}
-            <MarketStatusBadge />
+          <div className="flex items-center gap-2 sm:gap-4">
+            {/* Market Status Badge - hidden on small screens */}
+            <div className="hidden sm:block">
+              <MarketStatusBadge />
+            </div>
 
             {/* Live connection indicator */}
             <ConnectionStatus />
@@ -84,18 +112,18 @@ export default function Layout() {
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
             </Link>
 
-            {/* Settings */}
+            {/* Settings - hidden on mobile (available in more menu) */}
             <Link
               to="/settings"
-              className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg"
+              className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg hidden sm:flex"
             >
               <Settings size={20} />
             </Link>
           </div>
         </div>
 
-        {/* Indices Bar */}
-        <div className="px-4 border-t border-gray-700 bg-gray-800/50">
+        {/* Indices Bar - scrollable on mobile */}
+        <div className="px-4 border-t border-gray-700 bg-gray-800/50 overflow-x-auto scrollbar-hide">
           <IndicesBar />
         </div>
       </header>
@@ -134,17 +162,58 @@ export default function Layout() {
         </div>
       </aside>
 
+      {/* Sidebar overlay for mobile */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
+          onClick={toggleSidebar}
+        />
+      )}
+
       {/* Main content */}
       <main
         className={clsx(
-          'pt-24 min-h-screen transition-all duration-300',
-          isSidebarOpen ? 'ml-64' : 'ml-0'
+          'pt-24 min-h-screen transition-all duration-300 pb-20 lg:pb-0',
+          isSidebarOpen ? 'lg:ml-64' : 'ml-0'
         )}
       >
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           <Outlet />
         </div>
       </main>
+
+      {/* Mobile Bottom Navigation */}
+      <nav className="mobile-nav lg:hidden">
+        {mobileNavigation.map((item) => {
+          const isActive = location.pathname === item.href ||
+            (item.href === '/dashboard' && location.pathname === '/')
+          const isMore = item.name === 'More'
+
+          if (isMore) {
+            return (
+              <button
+                key={item.name}
+                onClick={toggleSidebar}
+                className={clsx('mobile-nav-item', isSidebarOpen && 'active')}
+              >
+                <item.icon size={20} />
+                <span>{item.name}</span>
+              </button>
+            )
+          }
+
+          return (
+            <Link
+              key={item.name}
+              to={item.href}
+              className={clsx('mobile-nav-item', isActive && 'active')}
+            >
+              <item.icon size={20} />
+              <span>{item.name}</span>
+            </Link>
+          )
+        })}
+      </nav>
     </div>
   )
 }

@@ -142,6 +142,49 @@ class APIClient {
     return response.data
   }
 
+  async getFIIDIIData(
+    timeRange: string = '1M',
+    segment: string = 'all'
+  ): Promise<FIIDIIData[]> {
+    const params = new URLSearchParams()
+    params.append('time_range', timeRange)
+    if (segment !== 'all') params.append('segment', segment)
+
+    const response = await this.client.get(`/analytics/fii-dii?${params}`)
+    return response.data
+  }
+
+  // ============== Watchlist ==============
+
+  async getWatchlist(): Promise<{
+    items: Array<{
+      id: number
+      symbol: string
+      name: string
+      ltp: number
+      change: number
+      changePercent: number
+      volume: number
+      high: number
+      low: number
+      open: number
+      prevClose: number
+      sparklineData: number[]
+      hasAlert: boolean
+    }>
+  }> {
+    const response = await this.client.get('/users/watchlist')
+    return response.data
+  }
+
+  async addToWatchlist(symbol: string): Promise<void> {
+    await this.client.post('/users/watchlist', { symbol })
+  }
+
+  async removeFromWatchlist(id: number): Promise<void> {
+    await this.client.delete(`/users/watchlist/${id}`)
+  }
+
   // ============== Authentication ==============
 
   async login(email: string, password: string): Promise<{ access_token: string; refresh_token: string }> {
