@@ -1,0 +1,138 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom base styles */
+@layer base {
+  :root {
+    --color-bullish: #22c55e;
+    --color-bearish: #ef4444;
+    --color-neutral: #f59e0b;
+  }
+
+  body {
+    @apply antialiased;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-800;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-600 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-500;
+  }
+}
+
+/* Custom component styles */
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-lg font-medium transition-colors duration-200;
+  }
+
+  .btn-primary {
+    @apply bg-primary-600 text-white hover:bg-primary-700;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-700 text-gray-100 hover:bg-gray-600;
+  }
+
+  .btn-outline {
+    @apply border border-gray-600 text-gray-300 hover:bg-gray-800;
+  }
+
+  .card {
+    @apply bg-gray-800 rounded-xl border border-gray-700 shadow-lg;
+  }
+
+  .input {
+    @apply bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+  }
+
+  /* Table styles */
+  .table-container {
+    @apply overflow-x-auto rounded-lg border border-gray-700;
+  }
+
+  .table {
+    @apply w-full text-sm text-left;
+  }
+
+  .table th {
+    @apply px-4 py-3 bg-gray-800 text-gray-400 font-medium uppercase text-xs tracking-wider;
+  }
+
+  .table td {
+    @apply px-4 py-3 border-t border-gray-700;
+  }
+
+  .table tr:hover {
+    @apply bg-gray-800/50;
+  }
+
+  /* Flow colors */
+  .flow-bullish {
+    @apply text-bullish;
+  }
+
+  .flow-bearish {
+    @apply text-bearish;
+  }
+
+  .flow-neutral {
+    @apply text-neutral;
+  }
+
+  /* Badge styles */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-bullish {
+    @apply bg-green-900/50 text-green-400;
+  }
+
+  .badge-bearish {
+    @apply bg-red-900/50 text-red-400;
+  }
+
+  .badge-unusual {
+    @apply bg-yellow-900/50 text-yellow-400;
+  }
+}
+
+/* Utility classes */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Animation for new data */
+  .highlight-new {
+    animation: highlight 2s ease-in-out;
+  }
+
+  @keyframes highlight {
+    0% {
+      background-color: rgba(99, 102, 241, 0.3);
+    }
+    100% {
+      background-color: transparent;
+    }
+  }
+
+  /* Monospace numbers */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
