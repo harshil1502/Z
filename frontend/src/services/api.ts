@@ -196,6 +196,68 @@ class APIClient {
     const response = await this.client.post(`/alerts/${alertId}/toggle`)
     return response.data
   }
+
+  // ============== Market ==============
+
+  async getMarketStatus(): Promise<{
+    status: string
+    reason: string
+    is_trading_day: boolean
+    next_event?: string
+    next_event_time?: string
+    timestamp: string
+    timezone: string
+    market_hours: {
+      pre_open_start: string
+      pre_open_end: string
+      market_open: string
+      market_close: string
+    }
+  }> {
+    const response = await this.client.get('/market/status')
+    return response.data
+  }
+
+  async getIndices(): Promise<{
+    timestamp: string
+    indices: Array<{
+      symbol: string
+      name: string
+      last_price: number
+      change: number
+      change_percent: number
+      open: number
+      high: number
+      low: number
+      prev_close: number
+    }>
+  }> {
+    const response = await this.client.get('/market/indices')
+    return response.data
+  }
+
+  async getTradingHolidays(year?: number): Promise<{
+    year: number
+    holidays: Array<{ date: string; day: string }>
+    total: number
+  }> {
+    const params = year ? `?year=${year}` : ''
+    const response = await this.client.get(`/market/holidays${params}`)
+    return response.data
+  }
+
+  async getUpcomingExpiries(): Promise<{
+    timestamp: string
+    expiries: Array<{
+      date: string
+      day: string
+      type: string
+      days_to_expiry: number
+    }>
+  }> {
+    const response = await this.client.get('/market/expiries')
+    return response.data
+  }
 }
 
 export const api = new APIClient()

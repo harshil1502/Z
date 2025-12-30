@@ -11,6 +11,7 @@ import {
   ChevronDown
 } from 'lucide-react'
 import { useAppStore } from '../../store'
+import { MarketStatusBadge, ConnectionStatus, IndicesBar, MarketStatusCard } from './MarketStatus'
 import clsx from 'clsx'
 
 const navigation = [
@@ -66,22 +67,11 @@ export default function Layout() {
 
           {/* Right section */}
           <div className="flex items-center gap-4">
-            {/* Live indicator */}
-            <button
-              onClick={toggleLiveUpdates}
-              className={clsx(
-                'flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm',
-                isLiveUpdates
-                  ? 'bg-green-900/50 text-green-400'
-                  : 'bg-gray-700 text-gray-400'
-              )}
-            >
-              <span className={clsx(
-                'w-2 h-2 rounded-full',
-                isLiveUpdates ? 'bg-green-400 animate-pulse' : 'bg-gray-500'
-              )} />
-              {isLiveUpdates ? 'LIVE' : 'PAUSED'}
-            </button>
+            {/* Market Status Badge */}
+            <MarketStatusBadge />
+
+            {/* Live connection indicator */}
+            <ConnectionStatus />
 
             {/* Alerts */}
             <button className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg relative">
@@ -95,12 +85,17 @@ export default function Layout() {
             </button>
           </div>
         </div>
+
+        {/* Indices Bar */}
+        <div className="px-4 border-t border-gray-700 bg-gray-800/50">
+          <IndicesBar />
+        </div>
       </header>
 
       {/* Sidebar */}
       <aside
         className={clsx(
-          'fixed left-0 top-14 bottom-0 z-40 w-64 bg-gray-800 border-r border-gray-700 transition-transform duration-300',
+          'fixed left-0 top-24 bottom-0 z-40 w-64 bg-gray-800 border-r border-gray-700 transition-transform duration-300',
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
@@ -125,23 +120,16 @@ export default function Layout() {
           })}
         </nav>
 
-        {/* Quick Stats */}
+        {/* Market Status Card */}
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-700">
-          <div className="text-xs text-gray-500 mb-2">Market Status</div>
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 bg-green-400 rounded-full" />
-            <span className="text-sm text-gray-300">NSE Open</span>
-          </div>
-          <div className="text-xs text-gray-500 mt-2">
-            Last updated: {new Date().toLocaleTimeString('en-IN')}
-          </div>
+          <MarketStatusCard />
         </div>
       </aside>
 
       {/* Main content */}
       <main
         className={clsx(
-          'pt-14 min-h-screen transition-all duration-300',
+          'pt-24 min-h-screen transition-all duration-300',
           isSidebarOpen ? 'ml-64' : 'ml-0'
         )}
       >

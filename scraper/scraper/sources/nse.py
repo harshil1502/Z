@@ -324,27 +324,51 @@ class NSEOptionsScraper:
         except ValueError:
             return datetime.utcnow()
 
-    async def process_and_store(self, data: dict) -> None:
+    async def process_and_store(self, data: dict) -> int:
         """
         Process scraped data and store in database.
 
         Args:
             data: Raw options chain data
+
+        Returns:
+            Number of records stored
         """
         # Parse the data
         records = self.parse_options_chain(data)
 
         if not records:
             logger.warning("No records to store")
-            return
+            return 0
 
-        # TODO: Implement database storage
-        # This would use SQLAlchemy to insert records into the database
-        logger.info(f"Processed {len(records)} option records for storage")
+        # Get symbol from first record
+        symbol = records[0].get("symbol", "UNKNOWN")
 
-        # For now, just log the first record as example
-        if records:
-            logger.debug("Sample record", record=records[0])
+        # Store to database
+        try:
+            from scraper.storage.database import DatabaseStorage
+
+            storage = DatabaseStorage()
+            await storage.initialize()
+            count = await storage.store_options_flow(records, symbol)
+            await storage.close()
+
+            logger.info(
+                "Stored options flow to database",
+                symbol=symbol,
+                count=count,
+            )
+            return count
+
+        except Exception as e:
+            logger.error(
+                "Failed to store to database",
+                error=str(e),
+                symbol=symbol,
+            )
+            # Fall back to just logging
+            logger.info(f"Processed {len(records)} option records (not stored)")
+            return 0
 
     async def store_fii_dii_data(self, data: dict) -> None:
         """
@@ -353,5 +377,19 @@ class NSEOptionsScraper:
         Args:
             data: FII/DII data from NSE
         """
-        # TODO: Implement database storage
-        logger.info("FII/DII data ready for storage", data_keys=list(data.keys()) if data else [])
+        if not data:
+            logger.warning("No FII/DII data to store")
+            return
+
+        try:
+            from scraper.storage.database import DatabaseStorage
+
+            storage = DatabaseStorage()
+            await storage.initialize()
+            await storage.store_fii_dii_data(data)
+            await storage.close()
+
+            logger.info("Stored FII/DII data to database")
+
+        except Exception as e:
+            logger.error("Failed to store FII/DII data", error=str(e))
