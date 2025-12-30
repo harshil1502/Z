@@ -18,6 +18,8 @@ const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Options Flow', href: '/flow', icon: Activity },
   { name: 'Analytics', href: '/analytics', icon: BarChart3 },
+  { name: 'Alerts', href: '/alerts', icon: Bell },
+  { name: 'Settings', href: '/settings', icon: Settings },
 ]
 
 export default function Layout() {
@@ -74,15 +76,21 @@ export default function Layout() {
             <ConnectionStatus />
 
             {/* Alerts */}
-            <button className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg relative">
+            <Link
+              to="/alerts"
+              className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg relative"
+            >
               <Bell size={20} />
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
-            </button>
+            </Link>
 
             {/* Settings */}
-            <button className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg">
+            <Link
+              to="/settings"
+              className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg"
+            >
               <Settings size={20} />
-            </button>
+            </Link>
           </div>
         </div>
 
